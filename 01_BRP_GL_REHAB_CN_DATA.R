@@ -6,9 +6,9 @@ library("tidyverse")
 
 #IMPORTANT:
 #YOUR SAMPLE_ID (I named it CNCode) should be consistent across all your spreadsheets.
-setwd("~/00DeakinUni/R/BCL_R/BCL/BRP/GL_REHAB")
+setwd("~/00DeakinUni/R/BCL_R/BCL/BRP/BRP_Gippsland")
 #Specify path to folder where you store youre CN spreadsheets and list them all:
-files <- list.files(path = "C:/Users/BlueCarbon/Documents/00DeakinUni/R/BCL_R/BCL/BRP/GL_REHAB/BRP_GL_REHAB_RAW",
+files <- list.files(path = "C:/Users/BlueCarbon/Documents/00DeakinUni/R/BCL_R/BCL/BRP/BRP_Gippsland/BRP_GL_REHAB_RAW",
                     pattern = "*.xls", full.names = T)
 
 #Create function to export data from sheet = 1 (Sample Table)
@@ -44,20 +44,20 @@ CN_DATA_clean <- CN_DATA %>%
   rename(file = "id1", CNCode = "Sample Name", Weight.mg = "Weight", #rename them to R-friendly column names
          N.percent = "(N) %", C.percent = "(C) %")
 
-dim(CN_DATA_clean)#139   5
+dim(CN_DATA_clean)#135   5
 #Check for duplicates:
 anyDuplicated(CN_DATA_clean$CNCode)#Should be 0!!!
 #If not 0, some samples are dupliacted,
 #You have to decide what to do with duplicates (e.g., average them, remove them)
 #Extract duplicate elements:
-CN_DATA_clean[duplicated(CN_DATA_clean)]#Nothing!YAY for "data frame with 0 columns"
+#CN_DATA_clean[duplicated(CN_DATA_clean)]#Nothing!YAY for "data frame with 0 columns"
 
 
 #Merge new CN data with your MASTER file:
-MASTER_DATA <- read.csv("~/00DeakinUni/R/BCL_R/BCL/BRP/GL_REHAB/BRP_CN_GL_REHAB.csv")
+MASTER_DATA <- read.csv("~/00DeakinUni/R/BCL_R/BCL/BRP/BRP_Gippsland/BRP_CN_GL_REHAB.csv")
 NewDATA <- left_join(MASTER_DATA, CN_DATA_clean, by = "CNCode")
 
-dim(MASTER_DATA)# 144  26 = 5 rows with NA-s extra on top 139 above.
+dim(MASTER_DATA)# 144  26 = 5 rows 
 dim(NewDATA)#144  30
-write.csv(NewDATA, file = "BRP_CN_GL_REHAB_NewDATA.csv") # Run and SEEK THIS FILE in your working directory
+#write.csv(NewDATA, file = "BRP_CN_GL_REHAB_NewDATA.csv") # Run and SEEK THIS FILE in your working directory
 
